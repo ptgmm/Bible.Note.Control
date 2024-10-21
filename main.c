@@ -11,18 +11,18 @@ int main (int argc, char *argv[]) {
     int check;
     char fullpath[256];
 
-    const char *username = getenv("USER");
-    snprintf(fullpath, sizeof(fullpath), "/home/%s/.config/%s", username, argv[2]);
+    const char *username = getenv("USER"); //Getting user name
+    snprintf(fullpath, sizeof(fullpath), "/home/%s/.config/%s", username, argv[2]); //create full path to .config
 
 
-    if (argc > 1) { 
-        if (strcmp(argv[1], "init") == 0 && argc == 3){
-            check = mkdir(fullpath, 0777); 
-            if (check == 0) {
-            printf("Directory created\n");
-            } else {
-                perror("Unable to create directory");
-                exit(1);
+    if (argc > 1) {                                     //Basically checking if the user entered "init" and folder name 
+        if (strcmp(argv[1], "init") == 0 && argc == 3){ //
+            check = mkdir(fullpath, 0777);              // 
+            if (check == 0) {                           //
+            printf("Directory created\n");              //
+            } else {                                    //
+                perror("Unable to create directory");   //
+                exit(1);                                //
             }
 
         } else {
