@@ -13,7 +13,9 @@ int main (int argc, char *argv[]) {
     int check;
     int addcheck;
     int config;
-
+    int bncfolder;
+    
+    char notefolderpath[256];
     char fullpathconfig[256];
     char addpath[256];
     char folderCheck[256];
@@ -23,16 +25,20 @@ int main (int argc, char *argv[]) {
     const char *username = getenv("USER"); //Getting user name
     const char *pwd = getcwd(cwd, sizeof(cwd));
 
-    snprintf(fullpathconfig, sizeof(fullpathconfig), "/home/%s/.config/%s", username, argv[2]); //create full path to .config
-    snprintf(addpath, sizeof(addpath), "/home/%s/.config/%s/%s", username, argv[3], argv[2]); //create full path to .config
+
+    snprintf(notefolderpath, sizeof(notefolderpath), "/home/%s/.config/BNC/", username);
+    snprintf(fullpathconfig, sizeof(fullpathconfig), "/home/%s/.config/BNC/%s", username, argv[2]); //create full path to .config
+    snprintf(addpath, sizeof(addpath), "/home/%s/.config/BNC/%s/%s", username, argv[3], argv[2]); //create full path to .config
     snprintf(folderCheck, sizeof(folderCheck), "/home/%s/.config/", username); //path to .config
     snprintf(add, sizeof(add), "%s/%s", pwd, argv[2]);
     
 
     struct stat statbuf;
     if (stat(folderCheck, &statbuf) != 0) {                         //Check if .config exist
-        config = mkdir(folderCheck, 0777);                          //If .config doesn't exist it will be created
-    } else if (stat(folderCheck, &statbuf) == 0 && argc > 1) {      //Basically checking if the user entered "init" and folder name 
+        config = mkdir(folderCheck, 0777);
+    } else if (stat(notefolderpath, &statbuf) != 0){
+        bncfolder = mkdir(notefolderpath, 0777);                                                           //If .config doesn't exist it will be created
+    } else if (stat(folderCheck, &statbuf) == 0 && (stat(notefolderpath, &statbuf) == 0) && argc > 1) {      //Basically checking if the user entered "init" and folder name 
         if (strcmp(argv[1], "init") == 0 && argc == 3){             //
             check = mkdir(fullpathconfig, 0777);                          // 
             if (check == 0) {                                       //
