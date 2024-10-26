@@ -14,12 +14,14 @@ int main (int argc, char *argv[]) {
     int addcheck;
     int config;
     int bncfolder;
+    int commitfolder;
     
     char notefolderpath[256];
     char fullpathconfig[256];
     char addpath[256];
     char folderCheck[256];
     char add[256];
+    char foldercommit[256];
     char cwd[PATH_MAX];
 
     const char *username = getenv("USER"); //Getting user name
@@ -27,6 +29,7 @@ int main (int argc, char *argv[]) {
 
 
     snprintf(notefolderpath, sizeof(notefolderpath), "/home/%s/.config/BNC/", username);
+    snprintf(foldercommit, sizeof(foldercommit), "/home/%s/.config/BNC/.commit/", username);
     snprintf(fullpathconfig, sizeof(fullpathconfig), "/home/%s/.config/BNC/%s", username, argv[2]); //create full path to .config
     snprintf(addpath, sizeof(addpath), "/home/%s/.config/BNC/%s/%s", username, argv[3], argv[2]); //create full path to .config
     snprintf(folderCheck, sizeof(folderCheck), "/home/%s/.config/", username); //path to .config
@@ -49,11 +52,13 @@ int main (int argc, char *argv[]) {
             }                                                       //
         } else if (strcmp(argv[1], "add") == 0 && argc == 4){
             addcheck = rename(add, addpath);
+            commitfolder = mkdir(foldercommit, 0777);
             if (addcheck == 0){
-                 printf("Good\n");
+                 printf("Note added to %s\n", argv[3]);
             } else {
-                perror("Bad");
+                printf("Unable to add note to %s\n", argv[3]);
              } 
+        } else if (strcmp(argv[1], "commit") == 0 && argc == 4){
         }
 
     }
