@@ -15,6 +15,7 @@ int main (int argc, char *argv[]) {
     int config;
     int bncfolder;
     int commitfolder;
+    int commitunder;
     
     char notefolderpath[256];
     char fullpathconfig[256];
@@ -24,6 +25,7 @@ int main (int argc, char *argv[]) {
     char foldercommit[256];
     char cwd[PATH_MAX];
     char commit[256];
+    char undercommit[256];
 
     const char *username = getenv("USER"); //Getting user name
     const char *pwd = getcwd(cwd, sizeof(cwd));
@@ -31,10 +33,11 @@ int main (int argc, char *argv[]) {
 
     snprintf(notefolderpath, sizeof(notefolderpath), "/home/%s/.config/BNC/", username);
     snprintf(foldercommit, sizeof(foldercommit), "/home/%s/.config/BNC/.commit/", username);
+    snprintf(undercommit, sizeof(undercommit), "/home/%s/.config/BNC/.commit/%s/", username, argv[3]);
     snprintf(fullpathconfig, sizeof(fullpathconfig), "/home/%s/.config/BNC/%s", username, argv[2]); //create full path to .config
     snprintf(addpath, sizeof(addpath), "/home/%s/.config/BNC/%s/%s", username, argv[3], argv[2]); //create full path to .config
     snprintf(folderCheck, sizeof(folderCheck), "/home/%s/.config/", username); //path to .config
-    snprintf(commit, sizeof(commit), "/home/%s/.config/BNC/.commit/%s", username, argv[2]);
+    snprintf(commit, sizeof(commit), "/home/%s/.config/BNC/.commit/%s/%s", username, argv[2], argv[3]);
     snprintf(add, sizeof(add), "%s/%s", pwd, argv[2]);
     
 
@@ -54,15 +57,21 @@ int main (int argc, char *argv[]) {
         } else if (strcmp(argv[1], "add") == 0 && argc == 4){
             addcheck = rename(add, addpath);
             commitfolder = mkdir(foldercommit, 0777);
+            commitunder = mkdir(undercommit, 0777);
             if (addcheck == 0){
                  printf("Note added to %s\n", argv[3]);
             } else {
                 printf("Unable to add note to %s\n", argv[3]);
              } 
-        } else if (strcmp(argv[1], "commit") == 0 && argc == 4){
+        } else if (strcmp(argv[1], "commit") == 0 && argc == 5){
             FILE *commopen = fopen(commit, "w");
-            fprintf(commopen, "%s\n", argv[3]);
+            fprintf(commopen, "%s\n", argv[4]);
             fclose(commopen);
+            if (commopen == 0){
+                printf("Unable to add commit '%s'\n", argv[4]);
+            } else {
+                printf("Commit '%s' added\n", argv[4]);
+            }
         }
 
     }
