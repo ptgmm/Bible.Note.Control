@@ -16,6 +16,7 @@ int main (int argc, char *argv[]) {
     int bncfolder;
     int commitfolder;
     int commitunder;
+
     
     char notefolderpath[256];
     char fullpathconfig[256];
@@ -26,6 +27,7 @@ int main (int argc, char *argv[]) {
     char cwd[PATH_MAX];
     char commit[256];
     char undercommit[256];
+    char log[256];
 
     const char *username = getenv("USER"); //Getting user name
     const char *pwd = getcwd(cwd, sizeof(cwd));
@@ -38,6 +40,7 @@ int main (int argc, char *argv[]) {
     snprintf(addpath, sizeof(addpath), "/home/%s/.config/BNC/%s/%s", username, argv[3], argv[2]); //create full path to .config
     snprintf(folderCheck, sizeof(folderCheck), "/home/%s/.config/", username); //path to .config
     snprintf(commit, sizeof(commit), "/home/%s/.config/BNC/.commit/%s/%s", username, argv[2], argv[3]);
+    snprintf(log, sizeof(log), "/home/%s/.config/BNC/.commit/%s/%s", username, argv[2], argv[3]);
     snprintf(add, sizeof(add), "%s/%s", pwd, argv[2]);
     
 
@@ -72,12 +75,20 @@ int main (int argc, char *argv[]) {
             } else {
                 printf("Commit '%s' added\n", argv[4]);
             }
+        } else if (strcmp(argv[1], "log") == 0 && argc == 4){
+            FILE *logopen = fopen(log, "r");
+            if (logopen == NULL){
+                perror("Logs cannot be viewed/n");
+                return 1;
+            }
+            char read;
+            while ((read = fgetc(logopen)) != EOF) {
+                putchar(read);
+            }
+            fclose(logopen);
         }
-
     }
- 
-
-
 
     return 0;
 }
+
