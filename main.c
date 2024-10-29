@@ -66,9 +66,16 @@ int main (int argc, char *argv[]) {
             } else {
                 printf("Unable to add note to %s\n", argv[3]);
              } 
-        } else if (strcmp(argv[1], "commit") == 0 && argc == 5){
+        } else if (strcmp(argv[1], "commit") == 0 && argc >= 5){
             FILE *commopen = fopen(commit, "w");
-            fprintf(commopen, "%s\n", argv[4]);
+            int i;
+            if (argc > 5){
+                for (i = 4; i < argc; i ++){
+                    fprintf(commopen, "%s ", argv[i]);
+                }
+            } else {
+                fprintf(commopen, "%s ", argv[i]);
+            }
             fclose(commopen);
             if (commopen == 0){
                 printf("Unable to add commit '%s'\n", argv[4]);
