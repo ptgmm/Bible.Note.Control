@@ -71,11 +71,15 @@ int main (int argc, char *argv[]) {
             int i;
             if (argc > 5){
                 for (i = 4; i < argc; i ++){
-                    fprintf(commopen, "%s ", argv[i]);
+                    fprintf(commopen, "%s", argv[i]);
+                    if (i < argc - 1){
+                        fprintf(commopen, " ");
+                    }
                 }
             } else {
-                fprintf(commopen, "%s ", argv[i]);
+                fprintf(commopen, "%s", argv[i]);
             }
+            fprintf(commopen, "\n");
             fclose(commopen);
             if (commopen == 0){
                 printf("Unable to add commit '%s'\n", argv[4]);
